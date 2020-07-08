@@ -6,32 +6,41 @@ import { Container } from '../shared/layout'
 
 import { useConvertation } from '../../hooks/useConvertation'
 
-export const MainInfo = ({ size, duration, bitrate, streams }) => {
+export const MainInfo = ({ data }) => {
 
     const { bitrateToTh, sizeToGb, durationToHours } = useConvertation()
+
+    console.log(data)
+
+    const mainInfo = [
+        {
+            bitrate: bitrateToTh(data.bit_rate)
+        },
+        {
+            size: sizeToGb(data.size)
+        },
+        {
+            duration: durationToHours(data.duration)
+        },
+        {
+            streams: data.nb_streams
+        }
+    ]
 
     return (
         <Card>
             <Container direction='column'>
                 <Container justify='flex-start'>
-                    <Text size='13px'>Main</Text>
+                    <Text size='13px' weight='900'>Main</Text>
                 </Container>
-                <Container justify='space-between' m='10px'>
-                    <ActiveText>Bitrate</ActiveText>
-                    <Text size='10px'>{bitrateToTh(bitrate)}</Text>
-                </Container>
-                <Container justify='space-between' m='10px'>
-                    <ActiveText>Size</ActiveText>
-                    <Text size='10px'>{sizeToGb(size)}</Text>
-                </Container>
-                <Container justify='space-between' m='10px'>
-                    <ActiveText>Duration</ActiveText>
-                    <Text size='10px'>{durationToHours(duration)}</Text>
-                </Container>
-                <Container justify='space-between' m='10px'>
-                    <ActiveText>Streams</ActiveText>
-                    <Text size='10px'>{streams}</Text>
-                </Container>
+                {
+                    mainInfo.map((item, index) => 
+                        <Container key={index} justify='space-between' m='10px'>
+                            <ActiveText>{Object.keys(item)}</ActiveText>
+                            <Text size='10px' weight='700'>{Object.values(item)}</Text>
+                        </Container>
+                    )
+                }
             </Container>
         </Card>
     )
