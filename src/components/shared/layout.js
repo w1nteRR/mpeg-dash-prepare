@@ -4,6 +4,9 @@ export const Container = styled.div`
     width: ${props => props.width || '100%'};
     height: ${props => props.height || 'auto'};
 
+    min-height: ${props => props.minHeight || 'auto'};
+    max-height: ${props => props.maxHeight || 'auto'};
+
     display: flex;
     align-items: ${props => props.align || 'center'};
     justify-content: ${props => props.justify || 'center'};
