@@ -32,8 +32,8 @@ export const VideoInfo = ({ data }) => {
                     <Text size='13px' weight='900'>Video</Text>
                 </Container>
                 {
-                    videoInfo.map(item => 
-                        <Container justify='space-between' m='10px'>
+                    videoInfo.map((item, index) => 
+                        <Container justify='space-between' m='10px' key={index}>
                             <ActiveText>{Object.keys(item)}</ActiveText>
                             <Text size='10px' weight='700'>{Object.values(item)}</Text>
                         </Container>

@@ -10,8 +10,6 @@ export const MainInfo = ({ data }) => {
 
     const { bitrateToTh, sizeToGb, durationToHours } = useConvertation()
 
-    console.log(data)
-
     const mainInfo = [
         {
             bitrate: bitrateToTh(data.bit_rate)
