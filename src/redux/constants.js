@@ -1,0 +1,4 @@
+export const NEXT_STEP = 'STEP/NEXT_STEP'
+
+export const UPLOAD_FILE = 'FILE/UPLOAD_FILE'
+export const GET_METADATA = 'FILE/GET_METADATA'
