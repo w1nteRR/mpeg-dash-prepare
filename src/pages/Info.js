@@ -23,11 +23,11 @@ export const Info = () => {
             </Container>
             <Container direction='column' justify='space-around' minHeight='100vh'>
                 <MainInfo data={metadata.format} />
-                <VideoInfo data={metadata.streams[0]} />
+                <VideoInfo data={metadata.streams[0]} fileName={metadata.format.filename} />
                 {
                     metadata.streams.map((item, index) => {
                         if(item.codec_type === 'audio') {
-                            return <AudioInfo key={index} data={item} />
+                            return <AudioInfo key={index} data={item} fileName={metadata.format.filename} />
                         }
                     })
                 }
