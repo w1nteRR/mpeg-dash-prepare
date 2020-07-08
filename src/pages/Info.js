@@ -6,6 +6,8 @@ import { Title, Text } from '../components/shared/typography'
 import { Container } from '../components/shared/layout'
 
 import { MainInfo } from '../components/Info/Main.info'
+import { VideoInfo } from '../components/Info/Video.info'
+import { AudioInfo } from '../components/Info/Audio.info'
 
 export const Info = () => {
 
@@ -19,12 +21,17 @@ export const Info = () => {
                 <Title>Information</Title>
                 <Text size='12px'>{metadata.format.tags.title}</Text>
             </Container>
-            <MainInfo 
-                size={metadata.format.size} 
-                duration={metadata.format.duration}
-                bitrate={metadata.format.bit_rate} 
-                streams={metadata.format.nb_streams}
-            />
-        </Container>
+            <Container direction='column' justify='space-around' minHeight='100vh'>
+                <MainInfo data={metadata.format} />
+                <VideoInfo data={metadata.streams[0]} />
+                {
+                    metadata.streams.map((item, index) => {
+                        if(item.codec_type === 'audio') {
+                            return <AudioInfo key={index} data={item} />
+                        }
+                    })
+                }
+            </Container>
+        </Container>        
     )
 }
