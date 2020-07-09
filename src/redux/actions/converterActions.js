@@ -1,16 +1,18 @@
 import { ipcRenderer } from 'electron'
 
-import { ACTIVATE_PROCESS, PROGRESS_PERCENT } from '../constants'
+import { PROGRESS_PERCENT } from '../constants'
 import { showAlert } from './appActions'
 
-export const startConvertation = (file, streamNum, lang) => dispatch => {
-    ipcRenderer.send('file:getAudio', {
+export const startConvertation = ({ file, streamNum, lang, type, subType }) => dispatch => {
+  
+    ipcRenderer.send(`file:${type}`, {
         file,
         streamNum,
-        lang
+        lang,
+        subType
     })
 
-    ipcRenderer.on('convertation:start', () => dispatch(showAlert('Started')))
+    ipcRenderer.on('convertation:start', () => dispatch(showAlert('Started', 'info')))
     
     ipcRenderer.on('convertation:error', (event, err) => dispatch(showAlert(err, 'error')))
 
