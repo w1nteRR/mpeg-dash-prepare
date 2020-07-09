@@ -66,3 +66,44 @@ ipcMain.on('file:getAudio', async (event, audio) => {
 		console.log(err)
 	}	
 })
+
+ipcMain.on('file:getSubtitles', async (event, subtitles) => {
+	const { file, streamNum, lang, subType } = subtitles
+
+	const fileName = file.fileNameFromPath()
+	
+	const outputFile = `${fileName}_${lang}_${subType}.vtt`
+
+	try {
+
+		await folderCheck(fileName, outputFile, event)
+
+		ffmpeg()
+			.input(file)
+			.outputOptions([
+				`-map 0:${streamNum}`,  
+				'-vn', 
+				'-an'
+			])
+			.output(`${converterFolderLocation}converted/${fileName}/${outputFile}`)
+
+			.on('start', () => event.sender.send('convertation:start'))
+			
+			.on('error', err => {
+				console.log(err.message)
+				event.sender.send('convertation:error', err.message)
+			})
+			
+			.on('progress', progress => {
+				console.log(progress.percent)
+				event.sender.send('convertation:processing', progress.percent)
+			})  
+			
+			.on('end', () => console.log('Finished processing'))
+			
+			.run() 
+
+	} catch (err) {
+		console.log(err)
+	}	
+})
