@@ -10,6 +10,9 @@ import { VideoInfo } from '../components/Info/Video.info'
 import { AudioInfo } from '../components/Info/Audio.info'
 import { SubInfo } from '../components/Info/Sub.info'
 
+import { Status } from '../components/Status/Status'
+import { Files } from '../components/Files/Files'
+
 import { runFileScanner } from '../redux/actions/fileActions'
 
 export const Info = () => {
@@ -24,37 +27,43 @@ export const Info = () => {
     }, [])
 
     return (
-        <Container direction='column'>
-            <Container align='flex-start' m='20px' direction='column'>
-                <Title>Information</Title>
-                <Text size='12px'>{metadata.format.tags.title}</Text>
+        <Container align='flex-start'>
+            <Container height='95vh' width='200px' direction='column'>
+                <Status />
+                <Files fileName={metadata.format.filename} />
             </Container>
-            <Container direction='column' justify='space-around' minHeight='100vh'>
-                <MainInfo 
-                    data={metadata.format} 
-                />
-                <VideoInfo 
-                    data={metadata.streams[0]} 
-                    fileName={metadata.format.filename} 
-                />
-                {
-                    metadata.streams.map((item, index) => {
-                        if(item.codec_type === 'audio') {
-                            return <AudioInfo 
-                                        key={index} 
-                                        data={item} 
-                                        file={metadata.format.filename} 
-                                    />
-                        }
-                        if(item.codec_type === 'subtitle') {
-                            return <SubInfo
-                                        key={index}
-                                        data={item}
-                                        file={metadata.format.filename}
-                                    />
-                        }
-                    })
-                }
+            <Container direction='column'>
+                <Container align='flex-start' m='20px' direction='column'>
+                    <Title>Information</Title>
+                    <Text size='12px'>{metadata.format.tags.title}</Text>
+                </Container>
+                <Container direction='column' justify='space-around' minHeight='100vh'>
+                    <MainInfo 
+                        data={metadata.format} 
+                    />
+                    <VideoInfo 
+                        data={metadata.streams[0]} 
+                        fileName={metadata.format.filename} 
+                    />
+                    {
+                        metadata.streams.map((item, index) => {
+                            if(item.codec_type === 'audio') {
+                                return <AudioInfo 
+                                            key={index} 
+                                            data={item} 
+                                            file={metadata.format.filename} 
+                                        />
+                            }
+                            if(item.codec_type === 'subtitle') {
+                                return <SubInfo
+                                            key={index}
+                                            data={item}
+                                            file={metadata.format.filename}
+                                        />
+                            }
+                        })
+                    }
+                </Container>
             </Container>
         </Container>        
     )
