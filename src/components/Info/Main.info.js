@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { Card } from '../shared/styled/Card'
-import { Text, ActiveText } from '../shared/typography'
+import { Text } from '../shared/typography'
 import { Container } from '../shared/layout'
+
+import { PropertiesList } from './Properties.list'
 
 import { useConvertation } from '../../hooks/useConvertation'
 
@@ -31,14 +33,7 @@ export const MainInfo = ({ data }) => {
                 <Container justify='flex-start'>
                     <Text size='13px' weight='900'>Main</Text>
                 </Container>
-                {
-                    mainInfo.map((item, index) => 
-                        <Container key={index} justify='space-between' m='10px'>
-                            <ActiveText>{Object.keys(item)}</ActiveText>
-                            <Text size='10px' weight='700'>{Object.values(item)}</Text>
-                        </Container>
-                    )
-                }
+                <PropertiesList properties={mainInfo} />
             </Container>
         </Card>
     )

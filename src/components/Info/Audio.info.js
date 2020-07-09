@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 
 import { Card } from '../shared/styled/Card'
 import { Container } from '../shared/layout'
-import { ActiveText, Text } from '../shared/typography'
+import { Text } from '../shared/typography'
 import { Button } from '../shared/styled/Button'
+
+import { PropertiesList } from './Properties.list'
 
 import { startConvertation } from '../../redux/actions/converterActions'
 
-export const AudioInfo = ({ data, fileName }) => {
+export const AudioInfo = ({ data, file }) => {
     
     const dispatch = useDispatch()
 
@@ -36,6 +38,12 @@ export const AudioInfo = ({ data, fileName }) => {
         }
     ]
 
+    const convertationOptions = {
+        file,
+        streamNum: data.index,
+        lang: data.tags.language,
+        type: 'getAudio'
+    }
 
     return (
         <Card>
@@ -43,14 +51,7 @@ export const AudioInfo = ({ data, fileName }) => {
                 <Container justify='flex-start'>
                     <Text size='13px' weight='900'>Audio</Text>
                 </Container>
-                {
-                    audioInfo.map((item, index) => 
-                        <Container justify='space-between' m='10px' key={index}>
-                            <ActiveText>{Object.keys(item)}</ActiveText>
-                            <Text size='10px' weight='700'>{Object.values(item)}</Text>
-                        </Container>
-                    )
-                }
+               <PropertiesList properties={audioInfo} />
             </Container>
             <Container justify='flex-start' p='10px'>
                 <Text size='10px' weight='900'>Cut audio</Text>
@@ -58,7 +59,7 @@ export const AudioInfo = ({ data, fileName }) => {
             <Button 
                 type='primary' 
                 text={`Get ${data.tags.title}`} 
-                onClick={() => dispatch(startConvertation(fileName, data.index, data.tags.language))} 
+                onClick={() => dispatch(startConvertation(convertationOptions))} 
             />
         </Card>
     )

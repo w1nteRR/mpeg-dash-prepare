@@ -2,8 +2,10 @@ import React from 'react'
 
 import { Card } from '../shared/styled/Card'
 import { Container } from '../shared/layout'
-import { ActiveText, Text } from '../shared/typography'
+import { Text } from '../shared/typography'
 import { Button } from '../shared/styled/Button'
+
+import { PropertiesList } from './Properties.list'
 
 export const VideoInfo = ({ data }) => {
 
@@ -31,14 +33,7 @@ export const VideoInfo = ({ data }) => {
                 <Container justify='flex-start'>
                     <Text size='13px' weight='900'>Video</Text>
                 </Container>
-                {
-                    videoInfo.map((item, index) => 
-                        <Container justify='space-between' m='10px' key={index}>
-                            <ActiveText>{Object.keys(item)}</ActiveText>
-                            <Text size='10px' weight='700'>{Object.values(item)}</Text>
-                        </Container>
-                    )
-                }
+                <PropertiesList properties={videoInfo} />
                 <Container justify='flex-start' p='10px'>
                     <Text size='10px' weight='900'>Convert to .264</Text>
                 </Container>
