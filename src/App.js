@@ -16,7 +16,7 @@ export const App = () => {
             {routes}
         </Router>
 
-        { alert.type && <Alert text={alert.text} type={alert.type} /> }
+        { alert.type && <Alert text={alert.text} type={alert.type} loader={alert.loader} /> }
         </>
     )
 }

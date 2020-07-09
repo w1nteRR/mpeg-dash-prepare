@@ -3,7 +3,8 @@ import { SHOW_ALERT, HIDE_ALERT } from "../constants"
 const initialState = {
     alert: {
         text: null,
-        type: null
+        type: null,
+        loader: false
     }
 }
 

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { ActiveText } from '../typography'
 import { Container } from '../layout'
 
+import { Loader } from './Loader/Loader'
+
 const alertColors = color => {
     switch (color) {
         case 'info':
@@ -29,9 +31,10 @@ const AlertStyled = styled.div`
     border-radius: 10px;
 `
 
-export const Alert = ({ type, text }) => 
+export const Alert = ({ type, text, loader }) => 
     <AlertStyled color={type}>
-        <Container height='100%'>
+        <Container height='100%' justify='space-around'>
+            {loader && <Loader w='20%' />}
             <ActiveText>
                 {text}
             </ActiveText>
