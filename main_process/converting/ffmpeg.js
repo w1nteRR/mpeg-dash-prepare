@@ -3,21 +3,37 @@ const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
 const path = require('path')
 
-ipcMain.on('file:getAudio', async (event, audio) => {
-	const { file, streamNum, lang } = audio
+require('../utils/proto')
 
-	const outputFile = file.replace(/^.*[\\\/]/, '').slice(0, -4)
-	const converterFolder = path.join(__dirname, '../../')
+const converterFolderLocation = path.join(__dirname, '../../')
+
+const folderCheck = async (folder, fileCheck, event) => {	
+
+	const pathToFolder = `${converterFolderLocation}converted/${folder}`
+	const pathToFile = `${converterFolderLocation}converted/${folder}/${fileCheck}`
 
 	try {
 
-		if(!fs.existsSync(`${converterFolder}converted/${outputFile}`)) {
-			await fs.promises.mkdir(`/converted/${outputFile}`)
-		}
+		if(!fs.existsSync(pathToFolder)) await fs.promises.mkdir(pathToFolder)
+	
+		if(fs.existsSync(pathToFile)) throw new Error('File exists')
+		
+	} catch (err) {	
+		event.sender.send('convertation:error', err.message)
+		throw err
+	}
+}
 
-		if(fs.existsSync(`${converterFolder}converted/${outputFile}/${outputFile}_${lang}.aac`)) {
-			return event.sender.send('convertation:error', 'File already exists')
-		}
+ipcMain.on('file:getAudio', async (event, audio) => {
+	const { file, streamNum, lang } = audio
+
+	const fileName = file.fileNameFromPath()
+	
+	const outputFile = `${fileName}_${lang}.aac`
+
+	try {
+
+		await folderCheck(fileName, outputFile, event)
 
 		ffmpeg()
 			.input(file)
@@ -28,7 +44,7 @@ ipcMain.on('file:getAudio', async (event, audio) => {
 				'-vn', 
 				'-sn'
 			])
-			.output(`${converterFolder}converted/${outputFile}/${outputFile}_${lang}.aac`)
+			.output(`${converterFolderLocation}converted/${fileName}/${outputFile}`)
 
 			.on('start', () => event.sender.send('convertation:start'))
 			
