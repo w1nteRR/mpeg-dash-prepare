@@ -7,6 +7,13 @@ require('../utils/proto')
 
 const converterFolderLocation = path.join(__dirname, '../../')
 
+const command = ffmpeg()
+
+ipcMain.on('convertation:stop', event => {
+	command.on('error', () => event.sender.send('convertation:kill'))
+	command.kill()
+})
+	
 const folderCheck = async (folder, fileCheck, event) => {	
 
 	const pathToFolder = `${converterFolderLocation}converted/${folder}`
@@ -29,13 +36,13 @@ ipcMain.on('file:getAudio', async (event, audio) => {
 
 	const fileName = file.fileNameFromPath()
 	
-	const outputFile = `${fileName}_${lang}.aac`
+	const outputFile = `${fileName}_${lang}_${streamNum}.aac`.toLowerCase()
 
 	try {
 
 		await folderCheck(fileName, outputFile, event)
 
-		ffmpeg()
+		command
 			.input(file)
 			.outputOptions([
 				`-map 0:${streamNum}`, 
@@ -46,7 +53,9 @@ ipcMain.on('file:getAudio', async (event, audio) => {
 			])
 			.output(`${converterFolderLocation}converted/${fileName}/${outputFile}`)
 
-			.on('start', () => event.sender.send('convertation:start'))
+			.on('start', () => {
+				event.sender.send('convertation:start')
+			})
 			
 			.on('error', err => {
 				console.log(err.message)
@@ -60,7 +69,7 @@ ipcMain.on('file:getAudio', async (event, audio) => {
 			
 			.on('end', () => console.log('Finished processing'))
 			
-			.run() 
+			.run()
 
 	} catch (err) {
 		console.log(err)
@@ -71,8 +80,8 @@ ipcMain.on('file:getSubtitles', async (event, subtitles) => {
 	const { file, streamNum, lang, subType } = subtitles
 
 	const fileName = file.fileNameFromPath()
-	
-	const outputFile = `${fileName}_${lang}_${subType}.vtt`
+
+	const outputFile = `${fileName}_${lang}_${subType}_${streamNum}.vtt`.toLowerCase()
 
 	try {
 
