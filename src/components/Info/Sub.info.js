@@ -35,7 +35,7 @@ export const SubInfo = ({ data, file }) => {
         file,
         streamNum: data.index,
         lang: data.tags.language,
-        subType: data.tags.title.toLowerCase(),
+        subType: data.tags.title,
         type: 'getSubtitles'
     }
 

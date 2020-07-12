@@ -12,25 +12,30 @@ import { SubInfo } from '../components/Info/Sub.info'
 
 import { Status } from '../components/Status/Status'
 import { Files } from '../components/Files/Files'
+import { Converting } from '../components/Converting/Converting'
 
 import { runFileScanner } from '../redux/actions/fileActions'
 
 export const Info = () => {
 
     const metadata = useSelector(state => state.file.metadata)
+    const isConverting = useSelector(state => state.converter.isRun)
     const dispatch = useDispatch()
 
     if(!Object.keys(metadata).length) return <Redirect  to='/' />
 
-    useEffect(() => {
-        dispatch(runFileScanner(metadata.format.filename))
-    }, [])
+    useEffect(() => dispatch(runFileScanner(metadata.format.filename)), [])
 
     return (
         <Container align='flex-start'>
-            <Container height='95vh' width='200px' direction='column'>
+            <Container width='200px' direction='column' m='100px 0'>
                 <Status />
                 <Files fileName={metadata.format.filename} />
+                {
+                    isConverting
+                    &&
+                    <Converting />
+                }
             </Container>
             <Container direction='column'>
                 <Container align='flex-start' m='20px' direction='column'>

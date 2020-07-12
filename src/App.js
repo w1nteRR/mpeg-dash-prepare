@@ -2,8 +2,9 @@ import React from 'react'
 import { HashRouter as Router } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-import { useRoutes } from './hooks/useRoutes'
 import { Alert } from './components/shared/styled/Alert'
+
+import { useRoutes } from './hooks/useRoutes'
 
 export const App = () => {
     
