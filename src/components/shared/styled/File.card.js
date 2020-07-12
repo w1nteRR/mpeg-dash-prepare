@@ -1,11 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Icon from '@mdi/react'
-import { mdiDelete } from '@mdi/js'
 
 import { ActiveText } from '../typography'
 import { Container } from '../layout'
-import { error } from '../colors'
 
 const FileCardStyled = styled.div`
     background-color: #fff;
@@ -15,15 +13,16 @@ const FileCardStyled = styled.div`
     margin: 10px;
     padding: 8px;
 `
-export const FileCard = ({ name, onClick }) => 
+export const FileCard = ({ name, onClick, icon, spin, iconColor }) => 
     <FileCardStyled>
         <Container justify='space-between'>
             <ActiveText>{name}</ActiveText>
             <Icon 
-                path={mdiDelete} 
+                path={icon} 
                 size={0.6} 
-                color={error} 
+                color={iconColor} 
                 onClick={onClick} 
+                spin={spin}
                 style={{
                     cursor: 'pointer'
                 }}
