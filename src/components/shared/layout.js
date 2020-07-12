@@ -11,6 +11,7 @@ export const Container = styled.div`
     align-items: ${props => props.align || 'center'};
     justify-content: ${props => props.justify || 'center'};
     flex-direction: ${props => props.direction || 'row'};
+    flex-wrap: ${props => props.wrap ? 'wrap' : null};
 
     margin: ${props => props.m || '0'};
     padding: ${props => props.p || '0'};

@@ -6,14 +6,16 @@ import { Container } from '../layout'
 
 import { Loader } from './Loader/Loader'
 
+import { primary, dark, error } from '../colors'
+
 const alertColors = color => {
     switch (color) {
         case 'info':
-            return '#58A5FF'
+            return primary
         case 'info-2':
-            return '#171717'
+            return dark
         case 'error':
-            return '#FF553E'
+            return error
         default:
             throw new Error()
     }

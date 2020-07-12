@@ -17,5 +17,5 @@ export const ActiveText = styled(Text)`
     text-transform: uppercase;
     font-size: 9px;
     font-weight: 800;
-    color: #505050;
+    color: ${props => props.color || '#505050'};
 `

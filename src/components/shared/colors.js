@@ -1,0 +1,5 @@
+export const primary = '#58A5FF'
+export const dark = '#171717'
+export const error = '#FF553E'
+export const warning = '#FFC634'
+export const success = '#04C900'

@@ -2,14 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 import { ActiveText } from '../typography'
 
+import { dark, error, primary } from '../colors'
+
 const buttonColors = color => {
     switch (color) {
         case 'primary':
-            return '#58A5FF'
+            return primary
         case 'secondary':
-            return '#171717'
+            return dark
         case 'danger':
-            return '#FF553E'
+            return error
         default:
             throw new Error()
     }
