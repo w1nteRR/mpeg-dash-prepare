@@ -2,7 +2,7 @@ const path = require('path')
 
 const config = {
     watch: true,
-    target: "electron-renderer",
+    target: "electron-main",
     entry: "./src/renderer.js",
     output: {
         filename: "bundle.js",
@@ -25,9 +25,12 @@ const config = {
     },
     resolve: {
         extensions: [".js", ".jsx"]
+    },
+    devServer: {
+        contentBase: './src/bundle',
+        hot: true,
+        port: 3000
     }
 }
 
-module.exports = () => {
-    return config
-}
+module.exports = () => config

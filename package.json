@@ -2,11 +2,12 @@
   "name": "mpeg-dash",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "./src/bundle/main.js",
   "scripts": {
     "bundle": "webpack --mode development",
-    "serve": "electron .",
-    "start": "npm-run-all --parallel bundle serve"
+    "electron": "electron .",
+    "react": "webpack-dev-server --config ./webpack.config.js --mode-development",
+    "start": "npm-run-all --parallel react electron"
   },
   "keywords": [],
   "author": "Mykola Vatamanyuk",
@@ -36,8 +37,11 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "connected-react-router": "^6.8.0",
+    "history": "^4.10.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.21",
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
