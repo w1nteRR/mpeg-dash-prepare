@@ -1,22 +1,18 @@
 import React from 'react'
-import { HashRouter as Router } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { Alert } from './components/shared/styled/Alert'
 
 import { useRoutes } from './hooks/useRoutes'
 
-export const App = () => {
-    
-    const routes = useRoutes()
+export const App = ({ history }) => {
+
     const alert = useSelector(state => state.app.alert)
+    const routes = useRoutes(history)
 
     return (
         <>
-        <Router>
-            {routes}
-        </Router>
-
+        {routes}
         { alert.type && <Alert text={alert.text} type={alert.type} loader={alert.loader} /> }
         </>
     )
