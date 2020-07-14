@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron'
 
-import { GET_METADATA, SET_SCANNER_STATUS } from '../constants'
+import { GET_METADATA, SET_SCANNER_STATUS, SET_AVAILABLE_FILES } from '../constants'
 
 export const openFileDialog = callback => dispatch => {
-    ipcRenderer.send('file-dialog-open')
+    ipcRenderer.send('file:upload')
     ipcRenderer.on('file:metadata', (event, metadata) => {
         dispatch({
             type: GET_METADATA,
@@ -13,13 +13,16 @@ export const openFileDialog = callback => dispatch => {
     })
 }
 
-export const runFileScanner = file => dispatch => {
-    ipcRenderer.send('file:scanner-run', file)
+export const runFileScanner = (file, streams) => dispatch => {
+    ipcRenderer.send('scanner:start', {
+        file,
+        streams
+    })
     
-    ipcRenderer.on('file:scanner-result', (event, dir) => {
+    ipcRenderer.on('scanner:result', (event, availableFiles) => {
         dispatch({
-            type: SET_SCANNER_STATUS,
-            payload: dir
+            type: SET_AVAILABLE_FILES,
+            payload: availableFiles
         })
     })
 }

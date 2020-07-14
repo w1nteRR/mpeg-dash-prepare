@@ -1,8 +1,18 @@
-import { GET_METADATA, SET_SCANNER_STATUS } from '../constants'
+import { GET_METADATA, SET_SCANNER_STATUS, SET_AVAILABLE_FILES } from '../constants'
 
 const initialStata = {
     metadata: {},
-    convertedFiles: []
+    availableFiles: [
+        {
+            video: []
+        },
+        {
+            audio: []
+        },
+        {
+            subtitles: []
+        }
+    ]
 }
 
 export const fileReducer = (state = initialStata, action) => {
@@ -12,10 +22,10 @@ export const fileReducer = (state = initialStata, action) => {
                 ...state,
                 metadata: state.metadata = action.payload
             }
-        case SET_SCANNER_STATUS:
+        case SET_AVAILABLE_FILES:
             return {
                 ...state,
-                convertedFiles: action.payload
+                availableFiles: action.payload
             }
         default:
             return state

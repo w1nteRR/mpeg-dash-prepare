@@ -10,14 +10,15 @@ export const addConvertingFile = file => ({
 
 export const startConvertation = ({ file, streamNum, lang, type, subType }) => dispatch => {
   
-    ipcRenderer.send(`file:${type}`, {
+    ipcRenderer.send(`convertation:start`, {
         file,
         streamNum,
         lang,
-        subType
+        subType,
+        type
     })
 
-    ipcRenderer.on('convertation:start', () => {
+    ipcRenderer.on('convertation:started', () => {
         dispatch({
             type: ACTIVATE_PROCESS,
             payload: streamNum  
@@ -37,8 +38,8 @@ export const startConvertation = ({ file, streamNum, lang, type, subType }) => d
 }
 
 export const killConverting = () => dispatch => {
-    ipcRenderer.send('convertation:stop')
-    ipcRenderer.on('convertation:kill', () => dispatch({
+    ipcRenderer.send('convertation:kill')
+    ipcRenderer.on('convertation:killed', () => dispatch({
         type: CONVERTATION_KILL
     }))
 }
