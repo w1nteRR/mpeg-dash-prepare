@@ -1,7 +1,9 @@
 import { ipcRenderer } from 'electron'
 
 import { PROGRESS_PERCENT, ADD_CONVERTING_FILE, CONVERTATION_KILL, ACTIVATE_PROCESS } from '../constants'
+
 import { showAlert } from './appActions'
+import { runFileScanner } from './fileActions'
 
 export const addConvertingFile = file => ({
     type: ADD_CONVERTING_FILE,
@@ -35,6 +37,8 @@ export const startConvertation = ({ file, streamNum, lang, type, subType }) => d
             payload: progress
         })
     })
+
+    ipcRenderer.on('convertation:end', () => dispatch(runFileScanner()))
 }
 
 export const killConverting = () => dispatch => {

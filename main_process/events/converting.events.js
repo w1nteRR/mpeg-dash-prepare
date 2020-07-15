@@ -19,6 +19,9 @@ ipcMain.on('convertation:start', async (event, fileData) => {
             () => event.sender.send('convertation:started')
         )
 
+        event.sender.send('convertation:end')
+
+
     } catch (err) {
         console.log(err)
     }
