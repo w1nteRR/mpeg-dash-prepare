@@ -2,17 +2,11 @@ import { GET_METADATA, SET_SCANNER_STATUS, SET_AVAILABLE_FILES } from '../consta
 
 const initialStata = {
     metadata: {},
-    availableFiles: [
-        {
-            video: []
-        },
-        {
-            audio: []
-        },
-        {
-            subtitles: []
-        }
-    ]
+    availableFiles: {
+        video: [],
+        audio: [],
+        subtitles: []
+    }
 }
 
 export const fileReducer = (state = initialStata, action) => {

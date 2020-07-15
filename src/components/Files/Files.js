@@ -11,26 +11,28 @@ import { error } from '../shared/colors'
 
 import { deleteFile } from '../../redux/actions/fileActions'
 
-export const Files = ({ fileName }) => {
+export const Files = ({ filePath, streams}) => {
 
-    const convertedFiles = useSelector(state => state.file.convertedFiles)
+    const availableFiles = useSelector(state => state.file.availableFiles)
     const dispatch = useDispatch()
+
+    const files = Object.values(availableFiles).map(item => item.flat().filter(el => el)).flat()
 
     return (
         <Card title='Files' w='150px'>
             {
-                convertedFiles.map(file => 
+                files.map(file => 
                     <FileCard 
                         name={file}
                         icon={mdiDelete} 
                         key={file}
                         iconColor={error}
-                        onClick={() => dispatch(deleteFile(file, fileName))} 
+                        onClick={() => dispatch(deleteFile(file, filePath, streams))} 
                     />
                 )
             }
             {
-                !convertedFiles.length
+                !files.length
                 &&
                 <Container m='10px 0'>
                     <ActiveText color={error}>No files or directory</ActiveText>

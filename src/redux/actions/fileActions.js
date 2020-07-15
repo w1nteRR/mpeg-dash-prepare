@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron'
 
-import { GET_METADATA, SET_SCANNER_STATUS, SET_AVAILABLE_FILES } from '../constants'
+import { GET_METADATA, SET_AVAILABLE_FILES } from '../constants'
 
 export const openFileDialog = callback => dispatch => {
     ipcRenderer.send('file:upload')
@@ -13,10 +13,11 @@ export const openFileDialog = callback => dispatch => {
     })
 }
 
-export const runFileScanner = (file, streams) => dispatch => {
-    ipcRenderer.send('scanner:start', {
-        file,
-        streams
+export const runFileScanner = () => ( dispatch, getState ) => {
+    const { file: { metadata: { format } } } = getState()
+    
+    ipcRenderer.send('scanner:start', { 
+        file: format.filename
     })
     
     ipcRenderer.on('scanner:result', (event, availableFiles) => {
@@ -27,11 +28,11 @@ export const runFileScanner = (file, streams) => dispatch => {
     })
 }
 
-export const deleteFile = (file, fileName) => dispatch => {
+export const deleteFile = (file, filePath) => dispatch => {
     ipcRenderer.send('file:delete', {
-        file, fileName
+        file, filePath
     })
-    ipcRenderer.on('file:delete-success', () => dispatch(runFileScanner(fileName)))
+    ipcRenderer.on('file:deleted', () => dispatch(runFileScanner()))
 }
 
     
