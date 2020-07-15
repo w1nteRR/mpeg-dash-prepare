@@ -4,18 +4,11 @@ const { converterFolderLocation } = require('../utils/constants')
 
 require('../utils/proto')
 
-const files = [
-    {
-        video: [],
-    },
-    {
-        audio: [],
-    },
-    {
-        subtitles: []
-    }
-]
-
+const pattern = {
+    video: [],
+    audio: [],
+    subtitles: []
+}
 
 async function preConvertationCheck(file, fileCheck) {
 
@@ -46,33 +39,37 @@ async function scanExists(file) {
     }
 }
 
-function runScanner(file, streams, dir) {
+function initPatterns(file, streams) {
 
     const fileName = file.fileNameFromPath()
     
     streams.forEach(item => {
         switch(item.codec_type) {
             case 'video':
-                return files[0].video.push(`${fileName}_${item.index}.264`)
+                return pattern.video.push(`${fileName}_${item.index}.264`)
             case 'audio':
-                return files[1].audio.push(`${fileName}_${item.tags.language}_${item.index}.aac`)
+                return pattern.audio.push(`${fileName}_${item.tags.language}_${item.index}.aac`)
             case 'subtitle':
-                return files[2].subtitles.push(`${item.index}.ttv`)
+                return pattern.subtitles.push(`${fileName}_${item.tags.language}_${item.tags.title.toLowerCase()}_${item.index}.vtt`)
             default:
-                return files
+                return pattern
         }
     })
-
-    return {
-        getAvailableFiles: () => files.map(item => ({
-            [Object.keys(item)]: Object.values(item)[0].filter(file => dir.includes(file))
-        }))
-    }
 }
 
+function getAvailableFiles (dir) {
+    const files = {}
+    
+    for(const [key, value] of Object.entries(pattern)) {
+        files[key] = value.filter(file => dir.includes(file))
+    }
+
+    return files
+}
 
 module.exports = {
     preConvertationCheck,
     scanExists,
-    runScanner
+    initPatterns,
+    getAvailableFiles
 }

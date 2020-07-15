@@ -4,14 +4,14 @@ const scannerService = require('../services/scanner.service')
 
 require('../utils/proto')
 
-ipcMain.on('scanner:start', async (event, data) => {
-    
-    const { file, streams } = data
+
+ipcMain.on('scanner:start', async (event, filePath ) => {
+    const { file } = filePath
     
     try {
 
         const dir = await scannerService.scanExists(file)
-        const availableFiles = scannerService.runScanner(file, streams, dir).getAvailableFiles()
+        const availableFiles = scannerService.getAvailableFiles(dir)
 
         event.sender.send('scanner:result', availableFiles)
 
