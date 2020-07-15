@@ -2,6 +2,7 @@ const { ipcMain } = require('electron')
 
 const fileService = require('../services/file.service')
 const ffmpegService = require('../services/ffmpeg.service')
+const scannerService = require('../services/scanner.service')
 
 const { converterFolderLocation } = require('../utils/constants')
 
@@ -12,6 +13,7 @@ ipcMain.on('file:upload', async event => {
 
         const file = await fileService.uploadFile()
         const metadata = await ffmpegService.getMetadata(file.filePaths[0])
+        scannerService.initPatterns(metadata.format.filename, metadata.streams)
         
         event.sender.send('file:metadata', metadata)
 
@@ -21,14 +23,16 @@ ipcMain.on('file:upload', async event => {
 })
 
 ipcMain.on('file:delete', async (event, fileData) => {
-    const { file, fileName } = fileData
+    const { file, filePath } = fileData
     
-    const dirName = fileName.fileNameFromPath()
+    const dirName = filePath.fileNameFromPath()
     const path = `${converterFolderLocation}/${dirName}/${file}`
 
     try {
 
         await fileService.deleteFile(path)
+
+        event.sender.send('file:deleted')
 
     } catch (err) {
         console.log(err)
