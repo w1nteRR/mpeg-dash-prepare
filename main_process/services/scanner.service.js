@@ -42,13 +42,18 @@ async function scanExists(file) {
 function initPatterns(file, streams) {
 
     const fileName = file.fileNameFromPath()
+
+    let config = {
+        videoExt: ['.264', '.mp4'],
+        audioExt: ['.aac', '.mp4']
+    }
     
     streams.forEach(item => {
         switch(item.codec_type) {
             case 'video':
-                return pattern.video.push(`${fileName}_${item.index}.264`)
+                return pattern.video.push(config.videoExt.map(ext => `${fileName}_${item.index}${ext}`))
             case 'audio':
-                return pattern.audio.push(`${fileName}_${item.tags.language}_${item.index}.aac`)
+                return pattern.audio.push(config.audioExt.map(ext => `${fileName}_${item.tags.language}_${item.index}${ext}`))
             case 'subtitle':
                 return pattern.subtitles.push(`${fileName}_${item.tags.language}_${item.tags.title.toLowerCase()}_${item.index}.vtt`)
             default:
@@ -59,9 +64,10 @@ function initPatterns(file, streams) {
 
 function getAvailableFiles (dir) {
     const files = {}
+
     
     for(const [key, value] of Object.entries(pattern)) {
-        files[key] = value.filter(file => dir.includes(file))
+        files[key] = value.flat().filter(file => dir.includes(file))
     }
 
     return files
