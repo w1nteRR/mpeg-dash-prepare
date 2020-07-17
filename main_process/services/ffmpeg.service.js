@@ -50,11 +50,26 @@ function initConvertingConfig (fileData) {
         outputFile: `${fileName}_${lang}_${subType}_${streamNum}.vtt`.toLowerCase(),
     }
 
+    const video = {
+        options: [ 
+            '-vcodec libx264', 
+            '-preset superfast',
+            '-x264opts keyint=24:min-keyint=24:no-scenecut',
+            '-b 5300k',
+            '-maxrate 5300k',
+            '-bufsize 2650k'
+        ],
+        outputPath: `${converterFolderLocation}/${fileName}`,
+        outputFile: `${fileName}_${streamNum}.264`
+    }
+
     switch(type) {
         case 'getAudio':
             return audio
         case 'getSubtitles':
             return subtitles
+        case 'getVideo':
+            return video
         default: 
             throw new Error('No file type')
     }

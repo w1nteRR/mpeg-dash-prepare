@@ -30,7 +30,7 @@ export const Status = () => {
                     <ActiveText 
                         color={isVideo ? success : error}
                     >
-                        {isVideo ? 'Convert video' : 'Video is available'}
+                        {isVideo ? 'Video is available' : 'Convert video'}
                     </ActiveText>
                     <Icon 
                         color={isVideo ? success : error} 

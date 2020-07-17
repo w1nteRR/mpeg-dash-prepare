@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Card } from '../shared/styled/Card'
 import { Container } from '../shared/layout'
@@ -7,7 +8,11 @@ import { Button } from '../shared/styled/Button'
 
 import { PropertiesList } from './Properties.list'
 
-export const VideoInfo = ({ data }) => {
+import { startConvertation } from '../../redux/actions/converterActions'
+
+export const VideoInfo = ({ data, file }) => {
+
+    const dispatch = useDispatch()
 
     const videoInfo = [
         {
@@ -27,6 +32,12 @@ export const VideoInfo = ({ data }) => {
         }
     ]
     
+    const convertationOptions = {
+        file,
+        streamNum: data.index,
+        type: 'getVideo'
+    }
+
     return (
         <Card>
             <Container direction='column'>
@@ -42,6 +53,7 @@ export const VideoInfo = ({ data }) => {
                         type='primary' 
                         w='40%' 
                         text='ffmpeg' 
+                        onClick={() => dispatch(startConvertation(convertationOptions))}
                     />
                     <Button 
                         type='secondary' 

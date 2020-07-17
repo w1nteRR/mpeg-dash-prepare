@@ -53,7 +53,7 @@ export const Info = () => {
                     />
                     <VideoInfo 
                         data={metadata.streams[0]} 
-                        fileName={metadata.format.filename} 
+                        file={metadata.format.filename} 
                     />
                     {
                         metadata.streams.map((item, index) => {
