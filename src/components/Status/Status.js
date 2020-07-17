@@ -1,74 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Icon from '@mdi/react'
-import { mdiCloseCircle, mdiAlertCircle, mdiCheckCircle } from '@mdi/js'
-import { useSelector } from 'react-redux'
+import { mdiSync } from '@mdi/js'
 
 import { Card } from '../shared/styled/Card'
 import { Container } from '../shared/layout'
-import { ActiveText } from '../shared/typography'
 
-import { error, warning, success } from '../shared/colors'
+import { StatusMain } from './Status.main'
+import { StatusDash } from './Status.dash'
+import { primary } from '../shared/colors'
 
 export const Status = () => {
 
-    const availableFiles = useSelector(state => state.file.availableFiles)
+    const [activeStatus, setActiveStatus] = useState(true)
+    const [rotateIcon, setRotate] = useState(0)
 
-    const isVideo = Object.values(availableFiles.video).length
-    const isAudio = Object.values(availableFiles.audio).length
-    const isSub = Object.values(availableFiles.subtitles).length
+    const switchStatus = () => {
+        setActiveStatus(prev => setActiveStatus(!prev)) 
+        setRotate(1)
+        
+        setTimeout(() => setRotate(0), 500)
+    }
 
     return (
         <Card title='Status' w='150px'>
-            <Container 
-                direction='column' 
-                align='start' 
-                justify='space-around' 
-                m='10px' 
-                height='200px'
-            >
-                <Container justify='space-between' width='90%'>
-                    <ActiveText 
-                        color={isVideo ? success : error}
-                    >
-                        {isVideo ? 'Video is available' : 'Convert video'}
-                    </ActiveText>
-                    <Icon 
-                        color={isVideo ? success : error} 
-                        size={0.7} 
-                        path={isVideo ? mdiCheckCircle : mdiCloseCircle} 
-                    />
-                </Container>
-                <Container 
-                    justify='space-between' 
-                    width='90%'
-                > 
-                    <ActiveText 
-                        color={isAudio ? success : warning}
-                    >
-                        {isAudio ? 'Audio is available' : 'Get audio'}
-                    </ActiveText>
-                    <Icon 
-                        color={isAudio ? success : warning} 
-                        size={0.7} 
-                        path={isAudio ? mdiCheckCircle : mdiAlertCircle} 
-                    />
-                </Container>
-                <Container 
-                    justify='space-between' 
-                    width='90%'
-                >
-                    <ActiveText 
-                        color={isSub ? success : warning}
-                    >
-                        {isSub ? 'Subtitles are available' : 'Get subtitles'}
-                    </ActiveText>
-                    <Icon 
-                        color={isSub ? success : warning} 
-                        size={0.7} 
-                        path={isSub ? mdiCheckCircle : mdiAlertCircle} 
-                    />
-                </Container>
+            <Container justify='flex-end'>
+                <Icon 
+                    path={mdiSync}
+                    color={primary}
+                    size={0.7}
+                    onClick={() => switchStatus()} 
+                    spin={rotateIcon}
+                    style={{
+                        cursor: 'pointer'
+                    }}
+                />
             </Container>
+            {
+                activeStatus
+                ? 
+                <StatusMain />
+                :
+                <StatusDash />
+            }
         </Card>
     )
 }
