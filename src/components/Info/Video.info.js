@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Card } from '../shared/styled/Card'
 import { Container } from '../shared/layout'
@@ -13,6 +13,7 @@ import { startConvertation } from '../../redux/actions/converterActions'
 export const VideoInfo = ({ data, file }) => {
 
     const dispatch = useDispatch()
+    const isVideo = useSelector(state => Object.values(state.file.availableFiles.video).length)
 
     const videoInfo = [
         {
@@ -50,17 +51,31 @@ export const VideoInfo = ({ data, file }) => {
                 </Container>
                 <Container justify='space-around'>
                     <Button 
-                        type='primary' 
-                        w='40%' 
+                        type='primary'  
                         text='ffmpeg' 
                         onClick={() => dispatch(startConvertation(convertationOptions))}
                     />
-                    <Button 
+                    {/* <Button 
                         type='secondary' 
                         w='40%' 
                         text='h264' 
-                    />
+                    /> */}
                 </Container>
+                {
+                    isVideo 
+                    &&
+                    <>
+                    <Container justify='flex-start' p='10px'>
+                        <Text size='10px' weight='900'>Convert to mp4</Text>
+                    </Container>
+                    <Container>
+                        <Button 
+                            type='secondary'
+                            text='mp4box'
+                        />
+                    </Container>
+                    </>
+                }
             </Container>
         </Card>
     )
