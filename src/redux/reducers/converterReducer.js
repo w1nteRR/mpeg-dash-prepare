@@ -30,9 +30,7 @@ export const converterReducer = (state = initialState, action) => {
                 convertingFile: action.payload
             }
         case CONVERTATION_KILL: 
-            return {
-                ...initialState
-            }
+            return initialState
         default: 
             return state      
     }

@@ -10,10 +10,26 @@ export const addConvertingFile = file => ({
     payload: file
 })
 
-export const startConvertation = ({ file, streamNum, lang, type, subType }) => dispatch => {
-  
+export const activateProcess = stream => ({
+    type: ACTIVATE_PROCESS,
+    payload: stream
+})
+
+export const liveProcess = progress => ({
+    type: PROGRESS_PERCENT,
+    payload: progress
+})
+
+export const killConvertation = () => ({
+    type: CONVERTATION_KILL
+})
+
+export const startConvertation = ({ streamNum, lang, type, subType }) => (dispatch, getState) => {
+
+    const { file: { metadata: { format } } } = getState()
+
     ipcRenderer.send(`convertation:start`, {
-        file,
+        file: format.filename,
         streamNum,
         lang,
         subType,
@@ -21,30 +37,27 @@ export const startConvertation = ({ file, streamNum, lang, type, subType }) => d
     })
 
     ipcRenderer.on('convertation:started', () => {
-        dispatch({
-            type: ACTIVATE_PROCESS,
-            payload: streamNum  
-        })
-        dispatch(addConvertingFile({ file, streamNum, type }))
+        console.log(streamNum)
+        dispatch(activateProcess(streamNum))
+        dispatch(addConvertingFile({ file: format.filename, streamNum, type }))
         dispatch(showAlert('Started', 'info'))
     })
     
     ipcRenderer.on('convertation:error', (event, err) => dispatch(showAlert(err, 'error')))
-
-    ipcRenderer.on('convertation:processing', (event, progress) => {
-        dispatch({
-            type: PROGRESS_PERCENT,
-            payload: progress
-        })
-    })
-
+    ipcRenderer.on('convertation:processing', (event, progress) => dispatch(liveProcess(progress)))
     ipcRenderer.on('convertation:end', () => dispatch(runFileScanner()))
 }
 
 export const killConverting = () => dispatch => {
     ipcRenderer.send('convertation:kill')
-    ipcRenderer.on('convertation:killed', () => dispatch({
-        type: CONVERTATION_KILL
-    }))
+    ipcRenderer.on('convertation:killed', () => dispatch(killConvertation()))
+}
+
+export const startRepacking = file => (dispatch, useState) => {
+    const { file: { metadata: { format } } } = getState()
+
+    ipcRenderer.send('repacking:start')
+    ipcRenderer.on('repacking:processing', (event, progress) => dispatch(liveProcess(progress)))
+    ipcRenderer.on('repacking:end', () => dispatch(runFileScanner()))
 }
     
