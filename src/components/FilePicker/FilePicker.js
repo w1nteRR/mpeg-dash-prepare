@@ -15,7 +15,7 @@ export const FilePicker = () => {
 
     return (
         <Container height='300px' direction='column'>
-            <Picker onClick={() => dispatch(openFileDialog(() => history.push('/info')))} /> 
+            <Picker onClick={() => dispatch(openFileDialog(() => history.push('/main/info')))} /> 
                 <ActiveText 
                     style={{ 
                         position: 'absolute', 
