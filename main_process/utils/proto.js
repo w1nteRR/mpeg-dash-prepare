@@ -5,3 +5,7 @@ String.prototype.fileNameFromPath = function () {
 String.prototype.fileExt = function () {
     return this.slice(0, -4)
 }
+
+String.prototype.replaceExt = function (ext) {
+    return this.slice(0, -4) + `${ext}`
+}
