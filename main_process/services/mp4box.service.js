@@ -3,10 +3,10 @@ require('../utils/proto')
 
 const mp4box = 'D:/GPAC/mp4box.exe'  
 
-function repack (file, callback) {
+function repack (file, onProcessing, onStart) {
     return new Promise(( resolve, reject ) => {
+        
         const output = file.replaceExt('.mp4')
-
         const process = spawn(mp4box, ['-add', `${file}`, `${output}`])
         
         process.on('close', code => {
@@ -15,7 +15,8 @@ function repack (file, callback) {
             :   reject(code)
         })
 
-        process.stderr.on('data', data => callback(data.toString())) 
+        process.stderr.on('data', data => onProcessing(data.toString()))
+        onStart()
     })  
 }
 
