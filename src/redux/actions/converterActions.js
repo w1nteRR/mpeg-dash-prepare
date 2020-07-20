@@ -20,7 +20,7 @@ export const liveProcess = progress => ({
     payload: progress
 })
 
-export const killConvertation = () => ({
+export const killProcess = () => ({
     type: CONVERTATION_KILL
 })
 
@@ -37,7 +37,6 @@ export const startConvertation = ({ streamNum, lang, type, subType }) => (dispat
     })
 
     ipcRenderer.on('convertation:started', () => {
-        console.log(streamNum)
         dispatch(activateProcess(streamNum))
         dispatch(addConvertingFile({ file: format.filename, streamNum, type }))
         dispatch(showAlert('Started', 'info'))
@@ -50,14 +49,20 @@ export const startConvertation = ({ streamNum, lang, type, subType }) => (dispat
 
 export const killConverting = () => dispatch => {
     ipcRenderer.send('convertation:kill')
-    ipcRenderer.on('convertation:killed', () => dispatch(killConvertation()))
+    ipcRenderer.on('convertation:killed', () => dispatch(killProcess()))
 }
 
-export const startRepacking = file => (dispatch, useState) => {
+export const startRepacking = file => (dispatch, getState) => {
     const { file: { metadata: { format } } } = getState()
 
-    ipcRenderer.send('repacking:start')
-    ipcRenderer.on('repacking:processing', (event, progress) => dispatch(liveProcess(progress)))
-    ipcRenderer.on('repacking:end', () => dispatch(runFileScanner()))
+    ipcRenderer.send('repack:start', {
+        file,
+        filePath: format.filename
+    })
+
+    ipcRenderer.on('repack:started', () => dispatch(addConvertingFile({ file: format.filename, type: 'repacking' })))
+    ipcRenderer.on('repack:processing', (event, progress) => dispatch(liveProcess(progress)))
+    ipcRenderer.on('repack:end', () => dispatch(runFileScanner()))
+    ipcRenderer.on('repack:error', () => dispatch(killProcess()))
 }
     
