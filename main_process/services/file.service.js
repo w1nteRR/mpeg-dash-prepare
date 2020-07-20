@@ -1,7 +1,9 @@
 const { dialog } = require('electron')
 const fs = require('fs')
+const { converterFolderLocation } = require('../utils/constants')
+require('../utils/proto')
 
-async function uploadFile () {
+async function uploadFile() {
     try {
         const file = await dialog.showOpenDialog({
                 properties: ['openFile'],
@@ -18,7 +20,7 @@ async function uploadFile () {
     }
 }
 
-async function deleteFile (path) {
+async function deleteFile(path) {
     try {
 
         await fs.promises.unlink(path)
@@ -28,7 +30,17 @@ async function deleteFile (path) {
     }
 }
 
+function getFolder(file) {
+    return file.fileNameFromPath()
+}
+
+function getConvertationPath(file) {
+    return `${converterFolderLocation}/${file.fileNameFromPath()}/${file}`
+}
+
 module.exports = {
     uploadFile,
-    deleteFile
+    deleteFile,
+    getFolder,
+    getConvertationPath
 }
